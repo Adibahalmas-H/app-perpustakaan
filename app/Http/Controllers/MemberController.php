@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 class MemberController extends Controller
 {
     private array $members = [
-        ['nama' => 'Raka Pratama' ,'nim' => '3125500011' ,'email' => 'rakaprtma@gmail.com', 'nomor_telepon' => '081234567890', 'alamat' => 'Surabaya','status' => 'Aktif'],
-        ['nama' => 'Aulia Safitri' ,'nim' => '4426500011' ,'email' => 'auliasafitri56@gmail.com', 'nomor_telepon' => '081238765890', 'alamat' => 'Semarang','status' => 'Cuti'],
-        ['nama' => 'Rafatar Malik' ,'nim' => '2224100016' ,'email' => 'rafatarmalik@gmail.com', 'nomor_telepon' => '081276435890', 'alamat' => 'Yogyakarta','status' => 'Aktif'],
+        ['id' => 1,'nama' => 'Raka Pratama' ,'nim' => '3125500011' ,'email' => 'rakaprtma@gmail.com', 'nomor_telepon' => '081234567890', 'alamat' => 'Surabaya','status' => 'Aktif'],
+        ['id' => 2, 'nama' => 'Aulia Safitri' ,'nim' => '4426500011' ,'email' => 'auliasafitri56@gmail.com', 'nomor_telepon' => '081238765890', 'alamat' => 'Semarang','status' => 'Cuti'],
+        ['id' => 3,'nama' => 'Rafatar Malik' ,'nim' => '2224100016' ,'email' => 'rafatarmalik@gmail.com', 'nomor_telepon' => '081276435890', 'alamat' => 'Yogyakarta','status' => 'Aktif'],
     ];
 
     public function index()
@@ -24,7 +24,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-        return view('members.create');
+        //return view('members.create');
     }
 
     /**
@@ -32,10 +32,10 @@ class MemberController extends Controller
      */
     public function store(StoreMemberReques $request)
     {
-        $validated = $request->validated();
+        //$validated = $request->validated();
 
-        return redirect()->route('members.index')
-            ->with('success', "Members \"{$validated['nama']}\" berhasil ditambahkan (data dummy, belum tersimpan ke database).");
+        //return redirect()->route('members.index')
+            //->with('success', "Members \"{$validated['nama']}\" berhasil ditambahkan (data dummy, belum tersimpan ke database).");
     }
 
     /**
@@ -43,11 +43,11 @@ class MemberController extends Controller
      */
     public function show(string $nim)
     {
-        $member = collect($this->members)->firstWhere('nim' , (string) $nim);
+        //$member = collect($this->members)->firstWhere('nim' , (string) $nim);
 
-        abort_if(! $member, 404);
+        //abort_if(! $member, 404);
 
-        return view('members.show', compact('member'));
+        //return view('members.show', compact('member'));
     }
 
     /**
@@ -55,11 +55,11 @@ class MemberController extends Controller
      */
     public function edit(string $nim)
     {
-        $member = collect($this->members)->firstWhere('nim' , (string) $nim);
+        //$member = collect($this->members)->firstWhere('nim' , (string) $nim);
 
-        abort_if(! $member, 404);
+       // abort_if(! $member, 404);
 
-        return view('members.edit', compact('member'));
+        //return view('members.edit', compact('member'));
     }
 
     /**
@@ -67,7 +67,7 @@ class MemberController extends Controller
      */
     public function update(Request $request, string $nim)
     {
-        $validated = $request->validate([
+        /*$validated = $request->validate([
             'nama' => 'required|string|max:100',
             'nim' => 'required|string|max:10',
             'email' => 'required|string|max:100',
@@ -77,7 +77,7 @@ class MemberController extends Controller
         ]);
 
         return redirect()->route('members.index')
-            ->with('success', "Members \"{$validated['nama']}\" berhasil diperbarui (data dummy, belum tersimpan ke database).");
+            ->with('success', "Members \"{$validated['nama']}\" berhasil diperbarui (data dummy, belum tersimpan ke database).");*/
     }
 
     /**
@@ -85,7 +85,7 @@ class MemberController extends Controller
      */
     public function destroy(string $nim)
     {
-        return redirect()->route('members.index')
-            ->with('success', "Member dengan id {$nim} berhasil dihapus (data dummy, belum tersimpan ke database).");
+        /*return redirect()->route('members.index')
+            ->with('success', "Member dengan id {$nim} berhasil dihapus (data dummy, belum tersimpan ke database).");*/
     }
 }
