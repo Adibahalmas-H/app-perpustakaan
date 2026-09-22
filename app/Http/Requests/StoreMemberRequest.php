@@ -4,9 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Override;
 
-class StoreMemberReques extends FormRequest
+class StoreMemberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,7 +31,7 @@ class StoreMemberReques extends FormRequest
             'status' => 'required|string|max:100',
         ];
     }
-    #[Override]
+
     public function messages(): array
     {
         return [

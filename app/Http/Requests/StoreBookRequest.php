@@ -7,9 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
@@ -29,7 +26,7 @@ class StoreBookRequest extends FormRequest
             'tahun_terbit' => 'required|integer|min:1900|max:'.date('Y'),
             'isbn' => 'nullable|string|max:20',
             'stok' => 'required|integer|min:0',
-            'category_id' => 'required|integer',
+            'category_id' => 'required|integer|exists:categories,id',
         ];
     }
         public function messages(): array
@@ -47,7 +44,7 @@ class StoreBookRequest extends FormRequest
             'stok.required' => 'Stok wajib diisi.',
             'stok.integer' => 'Stok harus berupa angka.',
             'stok.min' => 'Stok tidak boleh kurang dari 0.',
-            'category_id.required' => 'Kategori wajib dipilih.',
+            'category_id.required' => 'Kategori yang dipilih tidak valid.',
         ];
     }
 }

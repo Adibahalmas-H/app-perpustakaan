@@ -2,72 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreMemberReques;
+use App\Http\Requests\StoreMemberRequest;
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    private array $members = [
-        ['id' => 1,'nama' => 'Raka Pratama' ,'nim' => '3125500011' ,'email' => 'rakaprtma@gmail.com', 'nomor_telepon' => '081234567890', 'alamat' => 'Surabaya','status' => 'Aktif'],
-        ['id' => 2, 'nama' => 'Aulia Safitri' ,'nim' => '4426500011' ,'email' => 'auliasafitri56@gmail.com', 'nomor_telepon' => '081238765890', 'alamat' => 'Semarang','status' => 'Cuti'],
-        ['id' => 3,'nama' => 'Rafatar Malik' ,'nim' => '2224100016' ,'email' => 'rafatarmalik@gmail.com', 'nomor_telepon' => '081276435890', 'alamat' => 'Yogyakarta','status' => 'Aktif'],
-    ];
-
     public function index()
     {
-        $members = $this->members;
+        $members = Member::when(request('search'), fn ($query, $search) => 
+            $query->where('nama', 'like', "%{$search}%")
+        )->paginate(10);
+
         return view('members.index', compact('members'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //return view('members.create');
+        return view('members.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreMemberReques $request)
+    public function store(StoreMemberRequest $request)
     {
-        //$validated = $request->validated();
+        $validated = $request->validated();
 
-        //return redirect()->route('members.index')
-            //->with('success', "Members \"{$validated['nama']}\" berhasil ditambahkan (data dummy, belum tersimpan ke database).");
+        Member::create($validated);
+        return redirect()->route('members.index')
+            ->with('success', "Members \"{$validated['nama']}\" berhasil ditambahkan.");
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $nim)
     {
-        //$member = collect($this->members)->firstWhere('nim' , (string) $nim);
+        $member = Member::findOrFail($nim);
 
-        //abort_if(! $member, 404);
-
-        //return view('members.show', compact('member'));
+        return view('members.show', compact('members'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $nim)
     {
-        //$member = collect($this->members)->firstWhere('nim' , (string) $nim);
+        $member = Member::findOrFail($nim);
 
-       // abort_if(! $member, 404);
-
-        //return view('members.edit', compact('member'));
+        return view('members.edit', compact('member'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $nim)
     {
-        /*$validated = $request->validate([
+        $member = Member::findOrFail($nim);
+
+        $validated = $request->validate([
             'nama' => 'required|string|max:100',
             'nim' => 'required|string|max:10',
             'email' => 'required|string|max:100',
@@ -77,15 +59,14 @@ class MemberController extends Controller
         ]);
 
         return redirect()->route('members.index')
-            ->with('success', "Members \"{$validated['nama']}\" berhasil diperbarui (data dummy, belum tersimpan ke database).");*/
+            ->with('success', "Members \"{$validated['nama']}\" berhasil diperbarui.");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $nim)
     {
-        /*return redirect()->route('members.index')
-            ->with('success', "Member dengan id {$nim} berhasil dihapus (data dummy, belum tersimpan ke database).");*/
+        $member = Member::findOrFail($nim);
+        $member->delete();
+        return redirect()->route('members.index')
+            ->with('success', "Member dengan id {$nim} berhasil dihapus.");
     }
 }
