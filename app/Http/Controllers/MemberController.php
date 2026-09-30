@@ -31,11 +31,11 @@ class MemberController extends Controller
             ->with('success', "Members \"{$validated['nama']}\" berhasil ditambahkan.");
     }
 
-    public function show(string $nim)
+    public function show(string $id)
     {
-        $member = Member::findOrFail($nim);
+        $member = Member::with(['loans.loanItems.book', 'loans.user'])->findOrFail($id);
 
-        return view('members.show', compact('members'));
+        return view('members.show', compact('member'));
     }
 
     public function edit(string $nim)
@@ -45,14 +45,14 @@ class MemberController extends Controller
         return view('members.edit', compact('member'));
     }
 
-    public function update(Request $request, string $nim)
+    public function update(Request $request, string $id)
     {
-        $member = Member::findOrFail($nim);
+        $member = Member::findOrFail($id);
 
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'nim' => 'required|string|max:10',
-            'email' => 'required|string|max:100',
+            'nim' => 'required|string|max:10|unique:members,nim,'.$member->id,
+            'email' => 'required|string|max:100|unique:members,email,'.$member->id,
             'nomor_telepon' => 'required|string|max:100',
             'alamat' => 'required|string|max:200',
             'status' => 'required|string|max:100',
@@ -62,11 +62,11 @@ class MemberController extends Controller
             ->with('success', "Members \"{$validated['nama']}\" berhasil diperbarui.");
     }
 
-    public function destroy(string $nim)
+    public function destroy(string $id)
     {
-        $member = Member::findOrFail($nim);
+        $member = Member::findOrFail($id);
         $member->delete();
         return redirect()->route('members.index')
-            ->with('success', "Member dengan id {$nim} berhasil dihapus.");
+            ->with('success', "Member dengan id {$id} berhasil dihapus.");
     }
 }
